@@ -1,0 +1,17 @@
+﻿Launching lib\main.dart on Windows in debug mode...
+flutter : Error: Path C:\Home\01^toys\my_m
+emo-flutter contains invalid characters in
+ "'#!$^&*=|,;<>?". Please rename your dire
+ctory so as to not include any of these ch
+aracters and retry.
+위치 줄:1 문자:75
++ ... lutter\current\bin;" + $env:PATH; fl
+utter run -d windows 2>&1 | Out-F ...
++                                       ~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecifie 
+   d: (Error: Path C:\...ters and retry.  
+  :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeComma 
+   ndError
+ 

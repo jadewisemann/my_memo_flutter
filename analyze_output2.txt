@@ -1,0 +1,5 @@
+﻿Analyzing lib...
+
+warning - providers\providers.dart:4:8 - Unused import: '../models/outline_node.dart'. Try removing the import directive. - unused_import
+
+1 issue found.

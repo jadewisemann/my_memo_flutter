@@ -1,0 +1,16 @@
+﻿flutter : Path C:\Home\01^toys\my_memo-flu
+tter contains invalid characters in "'#!$^
+&*=|,;<>?". Please rename your directory s
+o as to not include any of these character
+s and retry.
+위치 줄:1 문자:75
++ ... flutter\current\bin;" + $env:PATH; f
+lutter build windows 2>&1 | Out-F ...
++                                        ~
+~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecifie 
+   d: (Path C:\Home\01...ters and retry.  
+  :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeComma 
+   ndError
+ 

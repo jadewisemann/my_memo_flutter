@@ -1,0 +1,12 @@
+﻿Analyzing lib...
+
+  error - providers\providers.dart:29:31 - The function 'StateProvider' isn't defined. Try importing the library that defines 'StateProvider', correcting the name to the name of an existing function, or defining a function named 'StateProvider'. - undefined_function
+  error - ui\widgets\bullet_icon.dart:3:8 - Target of URI doesn't exist: '../ui/theme.dart'. Try creating the file referenced by the URI, or try using a URI for a file that does exist. - uri_does_not_exist
+  error - ui\widgets\bullet_icon.dart:31:19 - Undefined name 'AppTheme'. Try correcting the name to one that is defined, or defining the name. - undefined_identifier
+  error - ui\widgets\bullet_icon.dart:33:23 - Undefined name 'AppTheme'. Try correcting the name to one that is defined, or defining the name. - undefined_identifier
+  error - ui\widgets\bullet_icon.dart:34:23 - Undefined name 'AppTheme'. Try correcting the name to one that is defined, or defining the name. - undefined_identifier
+warning - ui\outliner_page.dart:9:8 - Unused import: 'shortcuts/shortcut_intents.dart'. Try removing the import directive. - unused_import
+warning - ui\shortcuts\shortcut_bindings.dart:11:28 - The value of the local variable 'modifier' isn't used. Try removing the variable or using it. - unused_local_variable
+   info - ui\widgets\outliner_node_widget.dart:98:38 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+
+8 issues found.
