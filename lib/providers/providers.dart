@@ -37,6 +37,23 @@ class FocusedNodeNotifier extends Notifier<String?> {
   }
 }
 
+class FocusJumpRequest {
+  final int column;
+  final bool isDown;
+  const FocusJumpRequest({required this.column, required this.isDown});
+}
+
+class FocusJumpNotifier extends Notifier<FocusJumpRequest?> {
+  @override
+  FocusJumpRequest? build() => null;
+  
+  void set(FocusJumpRequest? req) {
+    state = req;
+  }
+}
+
+final focusJumpProvider = NotifierProvider<FocusJumpNotifier, FocusJumpRequest?>(FocusJumpNotifier.new);
+
 // ─── Derived Providers ───────────────────────────────────────────────
 
 /// Flattened list of visible nodes for the ListView.

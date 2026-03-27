@@ -40,6 +40,39 @@ class _OutlinerNodeWidgetState extends ConsumerState<OutlinerNodeWidget> {
     _focusNode = FocusNode(onKeyEvent: _handleKeyEvent);
 
     _focusNode.addListener(_onFocusChange);
+
+    // If instantiated natively into focus (e.g. lazy loading / scrolling)
+    if (ref.read(focusedNodeIdProvider) == widget.flatNode.node.id) {
+      _applyFocusJumpState();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _focusNode.requestFocus();
+      });
+    }
+  }
+
+  void _applyFocusJumpState() {
+    final jumpReq = ref.read(focusJumpProvider);
+    if (jumpReq != null) {
+      ref.read(focusJumpProvider.notifier).set(null); // consume
+      
+      final String newText = _controller.text;
+      int newOffset;
+      
+      if (jumpReq.isDown) {
+        int firstNewlineIndex = newText.indexOf('\n');
+        int firstLineLength = firstNewlineIndex == -1 ? newText.length : firstNewlineIndex;
+        newOffset = jumpReq.column < firstLineLength ? jumpReq.column : firstLineLength;
+      } else {
+        int lastNewlineIndex = newText.lastIndexOf('\n');
+        int lastLineStart = lastNewlineIndex == -1 ? 0 : lastNewlineIndex + 1;
+        int lastLineLength = newText.length - lastLineStart;
+        int col = jumpReq.column < lastLineLength ? jumpReq.column : lastLineLength;
+        newOffset = lastLineStart + col;
+      }
+
+      newOffset = newOffset.clamp(0, newText.length);
+      _controller.selection = TextSelection.collapsed(offset: newOffset);
+    }
   }
 
   @override
@@ -106,6 +139,12 @@ class _OutlinerNodeWidgetState extends ConsumerState<OutlinerNodeWidget> {
             // Internal movement allowed -> Let TextField bubble/handle naturally
             return KeyEventResult.ignored;
           } else {
+            // Calculate column index before jumping
+            int activeOffset = offset < 0 ? 0 : offset;
+            int lastNewlineIndex = text.lastIndexOf('\n', activeOffset - 1);
+            int targetColumn = activeOffset - (lastNewlineIndex == -1 ? 0 : lastNewlineIndex + 1);
+            ref.read(focusJumpProvider.notifier).set(FocusJumpRequest(column: targetColumn, isDown: false));
+
             // Jump to previous node
             Actions.invoke(context, const MoveFocusUpIntent());
             return KeyEventResult.handled;
@@ -117,6 +156,12 @@ class _OutlinerNodeWidgetState extends ConsumerState<OutlinerNodeWidget> {
             // Internal movement allowed -> Let TextField bubble/handle naturally
             return KeyEventResult.ignored;
           } else {
+            // Calculate column index before jumping
+            int activeOffset = offset < 0 ? 0 : offset;
+            int lastNewlineIndex = text.lastIndexOf('\n', activeOffset - 1);
+            int targetColumn = activeOffset - (lastNewlineIndex == -1 ? 0 : lastNewlineIndex + 1);
+            ref.read(focusJumpProvider.notifier).set(FocusJumpRequest(column: targetColumn, isDown: true));
+
             // Jump to next node
             Actions.invoke(context, const MoveFocusDownIntent());
             return KeyEventResult.handled;
@@ -174,6 +219,13 @@ class _OutlinerNodeWidgetState extends ConsumerState<OutlinerNodeWidget> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<String?>(focusedNodeIdProvider, (previous, next) {
+      if (next == widget.flatNode.node.id && !_focusNode.hasFocus) {
+        _applyFocusJumpState();
+        _focusNode.requestFocus();
+      }
+    });
+
     final node = widget.flatNode.node;
     final depth = widget.flatNode.depth;
     final hasChildren = widget.flatNode.hasChildren;

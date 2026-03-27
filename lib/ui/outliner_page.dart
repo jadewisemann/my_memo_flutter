@@ -46,11 +46,12 @@ class _OutlinerPageState extends ConsumerState<OutlinerPage> {
   }
 
   void _requestFocus(String nodeId) {
-    final key = _nodeKeys[nodeId];
-    if (key?.currentState != null) {
-      key!.currentState!.requestFocus();
-    }
+    // Rely exclusively on reactive ref.listen inside OutlinerNodeWidget to grab focus synchronously.
+    // This perfectly prevents cursor jumping by applying TextSelection offsets before render boundaries.
     ref.read(focusedNodeIdProvider.notifier).set(nodeId);
+    
+    // Optional: Scrolling into view can be placed here if heavily off-screen,
+    // though ListView.builder already handles localized virtualization bounds.
   }
 
   int _getCursorPosition(String nodeId) {
